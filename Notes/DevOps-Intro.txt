@@ -1,0 +1,115 @@
+
+
+What is DevOps ?
+
+Waterfall Model ---- Linear Process... 
+
+
+DevOps : 
+
+CI
+C.Delivery.
+C.Deployment.
+
+
+SDLC :::
+
+Code(java) --> Build(ant/maven/gradle)(compiling the source code & create artifacts-(*.war / *.jar)) -- Test-Code(app)(Unit testing) ---> QA ---> UAT --> Prod 
+
+DevOps 
+
+Dev Team, Testing Team, Infra Team, Release Management Team, Security Team
+
+Telecom, Banking Domain... 
+
+E-commerce  - Web Application
+
+netflex ... 
+
+google
+
+facebook ----> Continous Deployment
+
+*************************************************************
+
+Monolithic Application --> 
+
+Microservices ?
+
+Environment : Non-Prod Environment  (DEV,QA,UAT,Pre-Prod/Staging)	Security team / Audits	& Prod Environment
+
+
+Sign-up 		-- >  test (continuous Integration) --> Continous Delivery --> Continous Deployment
+Login
+search
+add to cart
+place my order
+pay for my order
+track my order 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+DevOps --->  Process/Strategy -- Tools, Process & People.
+
+
+
+Real-time process :
+
+Developer - 
+
+IT 
+
+Client will share the requirement !
+
+Developer:
+
+New Service (or) Enhance the existing service (or) Do Bug fixing
+
+Src code is available in Remote GIT Repository (Github/gitlab/AzRepo)
+
+bring into local repo  -- > automatically tested ---> promoted to higher environments!
+
+DevOps Engineer?
+
+End-to-End ---> CI/CD Pipeline 
+
+
+Jenkins --> Orchestrator! CI & CD & C.Deployments
+
+Checkout -- Build -- test -- deployment
+
+***** Continous Improvement *****
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+GIT 		--	GIT ??
+
+Jenkins
+
+
+
+<html> 
+dfsd
+
+adf
+asd
+facebookasd
+asddf
+sd
+facebooksdf
+asdf
+
+</html>
+
+local git repo.. 
+
+v1.0   - unit testing -- QA -- 
+v1.1   - unit testing -- QA -- 	
+v1.2   - unit testing -- QA -- 
+
+Remote Repository  -- Versioning & Tracking & Sharing the Source Code.
+
+Local Repo, 
+
+GITHub ?
