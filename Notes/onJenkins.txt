@@ -1,0 +1,94 @@
+Local Repo
+
+Main
+
+Develop 
+
+Feature1 ---> 
+
+Feature2 ---> 
+
+Pull Request ---->
+
+
+Remote Repo - Local 
+
+
+Rebase is to prevent Merge Conflict --->
+
+Merge 
+
+
+
+
+
+Master Branch:
+	file1.txt (rec1,second-rec2,rec3 )
+
+		feature1 :
+			file1.txt (rec1,record2,rec3 )
+			
+			merge request 
+
+		feature2 :
+			file1.txt (rec1,second-rec2,rec3)
+			
+			merge request 
+
+Merge Conflict Occurs!
+
+
+
+Jenkins ???  CI/CD 
+
+Jenkins 
+
+
+Jenkins Master-Slave Configuration.
+
+
+Java Source Code: 
+
+Build Server -- Build Tools -- GIT -- JDK -- Will perform Build & Create Artifacts *.war/*.jar.
+
+Virtual Machines  ---> Cloud Platform like: AWS/Az/GCP
+
+
+
+Non-Prod Environment:
+Jenkin Master (Build Server)
+	Build Server1 ---> Java Appln. Build Tools -- GIT -- JDK -- MAVEN
+	test-freestyle-job
+	Build Server2 ---> .Net
+	Build Server3 ---> Python
+	Build Server4 ---> NodeJS
+	
+	Test Server
+	
+		QA Server
+	
+		UAT Server
+	
+Prod Environment:
+
+Jenkin Master (PROD Server)
+
+Login to AWS 
+
+Create some Virtual Machines:
+
+
+
+SSH Client : MobaXterm
+
+
+Summary:
+
+Git basics
+AWS Instance Creation
+Login to AWS using MobaXterm
+Create Jenkins Server
+Install & Config Jenkins
+Explore Manage Jenkins ( Plugins Manager)
+Create Simple Freestyle Project to print Message
+Check console Output!
