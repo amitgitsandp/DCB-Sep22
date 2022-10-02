@@ -1,0 +1,382 @@
+Launch New AWS Linux Instances
+
+Jenkins Master, Node1, Node2
+
+With port 8080 & Name Tag
+Update the Instance
+
+Execute only in Master:
+
+#Install Jenkins :
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhatstable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+sudo -i
+
+#Install epel Package:
+
+amazon-linux-extras install epel
+#Install Java: 
+amazon-linux-extras install java-openjdk11
+
+yum install jenkins
+
+#Start Jenkins:
+
+# Start jenkins service
+service jenkins start
+systemctl 
+
+
+# Setup Jenkins to start at boot,
+chkconfig jenkins on
+
+systemctl enable jenkins
+systemctl start jenkins
+
+#systemctl enable tomcat
+#systemctl start tomcat
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+###Execute in Slave Nodes:
+
+sudo -i
+
+#Install epel Package:
+
+amazon-linux-extras install epel
+#Install Java: 
+amazon-linux-extras install java-openjdk11
+
+#Install GIT:
+
+yum install git
+  
+#Install Maven:
+
+cd /tmp
+
+#https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+
+sudo wget https://dlcdn.apache.org/maven/maven-3/3.8.6/binaries/apache-maven-3.8.6-bin.tar.gz
+
+sudo tar xf /tmp/apache-maven-3.8.6-bin.tar.gz -C /opt
+
+#Create a symlink for Apache maven directory to update the maven versions
+sudo ln -s /opt/apache-maven-3.8.6 /opt/maven
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Set Java Path / Environment Variables:
+open .bashrc & add the following lines:
+
+
+#java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64
+
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64"
+export MAVEN_HOME=/opt/apache-maven-3.8.6
+export M2=/opt/apache-maven-3.8.6/bin
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME:$M2
+
+source ~/.bash_profile
+
+open .bash_profile & add the following lines:
+
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64"
+export MAVEN_HOME=/opt/apache-maven-3.8.6
+export M2=/opt/apache-maven-3.8.6/bin
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin:$MAVEN_HOME:$M2
+
+source ~/.bash_profile
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Add User : useradd -m -d /home/jenkins jenkin
+
+su jenkin
+
+ssh-keygen
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_rsa - private key
+#id_rsa.pub - public
+
+cat id_rsa & copy the private key and paste it into jenkins node config. enter private key directly field
+Then,
+cat id_rsa.pub > authorized_keys
+
+chown -R jenkin /home/jenkins/.ssh
+chmod 600 /home/jenkins/.ssh/authorized_keys
+chmod 700 /home/jenkins/.ssh
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#Jenkins-Master <---> Jenkins Slave 
+
+#How the connection is established? SSH Keys
+#Create a New User - Create SSH Key for the user. 
+
+
+#Login to Jenkins thru browser, Go to Manage Jenkins --> Config Nodes -- > Add New Node 
+
+#Config the Node Name, Label, Access thru SSH Parm - user Name, with private key
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``
+
+Goto Global Tools config. Settings and ADD Maven Installation Details.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+pipeline {
+    
+    agent {
+        label 'Slave1'
+    }
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+            }
+        }
+	}
+}
+
+
+
+
+Pipeline Script:
+
+pipeline {
+    
+    agent {
+        label 'Slave1'
+    }
+		
+    tools 
+    {
+        maven 'Maven-3.8.6'
+    }
+    
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+
+            }
+			}
+        stage('Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+
+                // To run Maven on a Windows agent, use
+                //bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+			}
+    }
+}
+https://github.com/LoksaiETA/Java-mvn-app2.git
+
+
+/home/jenkins/workspace/CICD-Pipeline-Job1 $> mvn clean package
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~`
+#Install & configure Tomcat server :
+
+#Check out Official WebPage:
+#https://tomcat.apache.org/
+
+#Launch AWS EC2 Linux Instance:
+
+#Install JDK
+#Install epel Package:
+amazon-linux-extras install epel
+
+#Install Java: 
+amazon-linux-extras install java-openjdk11
+
+#Set Java Path / Environment Variables:
+#open .bashrc & add the following lines:
+
+#java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64
+
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64"
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+
+#Save the file
+#open .bash_profile & add the following lines:
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk-11.0.16.0.8-1.amzn2.0.1.x86_64"
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+
+#Save the file
+
+source ~/.bash_profile
+
+****************************************************************************************************
+
+#Install tomcat in Amazon Linux Instance:
+
+https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.82/bin/apache-tomcat-8.5.82.tar.gz
+
+cd /opt
+wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.82/bin/apache-tomcat-8.5.82.tar.gz
+tar -xvzf /opt/apache-tomcat-8.5.82.tar.gz
+mv apache-tomcat-8.5.82 tomcat
+
+#Start Tomcat Server:
+#Goto:
+
+cd /opt/tomcat/bin
+./startup.sh
+
+****************************************************************************************************
+
+#Add-USer for Tomcat :
+
+useradd -m -d /home/jenkins jenkin
+
+su - jenkin
+
+ssh-keygen
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_rsa - private key
+#id_rsa.pub - public
+
+#cat id_rsa & copy the private key and paste it into qa-server config. enter private key directly field.  Then,
+
+cd /home/jenkins/.ssh
+
+cat id_rsa.pub > authorized_keys
+
+chown -R jenkin /home/jenkins/.ssh
+chmod 600 /home/jenkins/.ssh/authorized_keys
+chmod 700 /home/jenkins/.ssh
+
+#make jenkin user as a owner to tomcat dir :
+
+chown -R jenkin /opt/tomcat
+
+****************************************************************************************************
+
+# Configure Jenkins :
+
+#Go to Jenkins Master thru Browser.
+
+#Install Publish over ssh plugin
+
+#Goto Manage Jenkins - Configure System - Configure Publish over ssh Plugin
+
+#Create Jenkins freestyle Job to Test the Deployment as discussed
+
+
+/opt/tomcat/webapps/target/mvn-hello-world.war
+
+**************************************************************************************
+pipeline {
+    
+    agent {
+        label 'Slave1'
+    }
+
+    tools 
+    {
+        maven 'MAVEN'
+    }
+    
+    stages {
+        stage('SCM-Checkout') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/LoksaiETA/Java-mvn-app2.git'
+
+            }
+			}
+        stage('Build') {
+            steps {
+                // Run Maven on a Unix agent.
+                sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+			}
+
+        stage('Deploy to QA AppServer') {
+            steps {
+				script {
+                    sshPublisher(publishers: [sshPublisherDesc(configName: 'QAServer', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '.', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/mvn-hello-world.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+				}
+            }
+              post {
+                success {
+                  sh "echo 'Send mail on success'"
+                  //mail bcc: '', body: 'success', cc: '', from: '', replyTo: '', subject: 'success', to: 'loksai.eta@gmail.com'
+                  mail to:"loksai.eta@gmail.com", from: 'loksai.eta@gmail.com', subject:"SUCCESS: ${currentBuild.fullDisplayName}", body: "we passed."
+                }
+                failure {
+                  sh "echo 'Send mail on failure'"
+                  mail to:"loksai.eta@gmail.com", from: 'loksai.eta@gmail.com', subject:"FAILURE: ${currentBuild.fullDisplayName}", body: "we failed."
+                }
+              }
+		}	
+
+    }
+}
+
+****************************************************************************************
+
+#Github webhook to automatically trigger build pipeline!
+
+#Goto Github Repository setting, 
+Select webhook, 
+
+Click Add Webhook
+
+Enter Jenkins Master URL. eg.:
+http://<public-IP>:8080/github-webhook/
+
+Choose the push event and save the webhook configuration
+
+**********************************************************************************
+#Ensure that you have Installed git on jenkins master: 
+
+sudo yum install git
+
+Go to Jenkins job, Under build trigger, enable "GitHub hook trigger for GITScm polling" option and save the json
+
+
+
+
+
+
+**********************************************
+
+smtp.gmail.com
+465
+
+build periodic
+
+SCM poll ---> for every 1 hour I want to trigger my build job, if there is any commit happened. 
+
+Webhook trigger ---> It triggers the jobs as and when commit happens. 
+
+
+
+
+Summary:
+
+Jenkins Master Slave Config
+QA-Server Configuration with Tomcat server
+Deploy to QA-Server
+Email Notification
+Publish over ssh plugin configuration
+CICD Freestyle project / Pipeline 
+
+
+
+
+
+
+
